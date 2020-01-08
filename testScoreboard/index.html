@@ -1,0 +1,276 @@
+﻿<!DOCTYPE html>
+<html>
+<head>
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>
+        CTF Ohio Scoreboard
+    </title>
+    <style>
+        canvas {
+            border: 1px solid lawngreen;
+            background-color: #36454F;
+            padding-left: 0;
+            padding-right: 0;
+            margin-left: auto;
+            margin-right: auto;
+            display: block;
+            width: 600px;
+        }
+        body {
+            background-color: #36454F;
+            color: lawngreen;
+            font-family: 'Courier New';
+            font-size: 20px;
+        }
+        .content {
+            max-width: 500px;
+            margin: auto;
+        }
+        .buttons {
+            text-align: center;
+            padding-top:10px;
+        }
+        #liveFeed {
+            font-size: 30px;
+            text-align: center;
+        }
+        #teams{
+            font-size: 30px;
+            position: absolute;
+            top:0;
+            right:0;
+            padding-right: 90px;
+        }
+        #mariners{
+            font-size: 20px;
+            position: absolute;
+            top:0;
+            right:0;
+            padding-right: 90px;
+            padding-top: 100px;
+        }
+        #astros{
+            font-size: 20px;
+            position: absolute;
+            top:0;
+            right:0;
+            padding-right: 90px;
+            padding-top: 200px;
+        }
+        #jays{
+            font-size: 20px;
+            position: absolute;
+            top:0;
+            right:0;
+            padding-right: 90px;
+            padding-top: 300px;
+        }
+
+    </style>
+</head>
+
+<body onload="startGame()">
+<div class="content">
+
+    <p id="teams"></p>
+    <p id="mariners"></p>
+    <p id="astros"></p>
+    <p id="jays"></p>
+
+    <div class="buttons">
+        <button onmousedown="contestedCinci()" onmouseup="capturedCinci()" ontouchstart="contestedCinci()">1</button>
+        <button onmousedown="contestedDayton()" onmouseup="capturedDayton()" ontouchstart="contestedDayton()">2</button>
+        <button onmousedown="contestedColumbus()" onmouseup="capturedColumbus()" ontouchstart="contestedColumbus()">3</button>
+        <button onmousedown="contestedAthens()" onmouseup="capturedAthens()" ontouchstart="contestedAthens()">4</button>
+        <button onmousedown="contestedToledo()" onmouseup="capturedToledo()" ontouchstart="contestedToledo()">5</button>
+        <button onmousedown="contestedAkron()" onmouseup="capturedAkron()" ontouchstart="contestedAkron()">6</button>
+        <button onmousedown="contestedCleveland()" onmouseup="capturedCleveland()" ontouchstart="contestedCleveland()">7</button>
+    </div>
+
+    <p id="liveFeed"></p>
+    <p id="cleveland"></p>
+    <p id="akron"></p>
+    <p id="toledo"></p>
+    <p id="athens"></p>
+    <p id="columbus"></p>
+    <p id="dayton"></p>
+    <p id="cinci"></p>
+
+    <script>
+
+        var myGamePiece;
+        var myBackground;
+
+        function startGame() {
+            cityCinci = new component(50, 50, "https://mailuc-my.sharepoint.com/personal/reillytr_mail_uc_edu/Documents/UC%20CTF/uncontested.png?csf=1&e=8cPGyj&cid=0a454b84-678a-49ed-a756-3ce76255dc15", 35, 350, "image");
+            cityDayton = new component(50, 50, "https://mailuc-my.sharepoint.com/personal/reillytr_mail_uc_edu/Documents/UC%20CTF/uncontested.png?csf=1&e=8cPGyj&cid=0a454b84-678a-49ed-a756-3ce76255dc15", 63, 268, "image");
+            cityColumbus = new component(50, 50, "https://mailuc-my.sharepoint.com/personal/reillytr_mail_uc_edu/Documents/UC%20CTF/uncontested.png?csf=1&e=8cPGyj&cid=0a454b84-678a-49ed-a756-3ce76255dc15", 220, 210, "image");
+            cityAthens = new component(50, 50, "https://mailuc-my.sharepoint.com/personal/reillytr_mail_uc_edu/Documents/UC%20CTF/uncontested.png?csf=1&e=8cPGyj&cid=0a454b84-678a-49ed-a756-3ce76255dc15", 310, 330, "image");
+            cityToledo = new component(50, 50, "https://mailuc-my.sharepoint.com/personal/reillytr_mail_uc_edu/Documents/UC%20CTF/uncontested.png?csf=1&e=8cPGyj&cid=0a454b84-678a-49ed-a756-3ce76255dc15", 125, 10, "image");
+            cityAkron = new component(50, 50, "https://mailuc-my.sharepoint.com/personal/reillytr_mail_uc_edu/Documents/UC%20CTF/uncontested.png?csf=1&e=8cPGyj&cid=0a454b84-678a-49ed-a756-3ce76255dc15", 380, 85, "image");
+            cityCleveland = new component(50, 50, "https://mailuc-my.sharepoint.com/personal/reillytr_mail_uc_edu/Documents/UC%20CTF/uncontested.png?csf=1&e=8cPGyj&cid=0a454b84-678a-49ed-a756-3ce76255dc15", 355, 30, "image");
+
+            myBackground = new component(500, 500, "https://mailuc-my.sharepoint.com/:i:/r/personal/reillytr_mail_uc_edu/Documents/UC%20CTF/ohio.png?csf=1&e=DtzMjQ", 0, 0, "image");
+            myGameArea.start();
+
+            document.getElementById("liveFeed").innerHTML = "Live Feed";
+
+            document.getElementById("teams").innerHTML = "Teams";
+            document.getElementById("mariners").innerHTML = "Seattle Mariners: 0"
+            document.getElementById("astros").innerHTML = "Houston Astros: 0"
+            document.getElementById("jays").innerHTML = "Toronto Blue Jays: 0"
+
+        }
+
+        var myGameArea = {
+            canvas: document.createElement("canvas"),
+            start: function () {
+                this.canvas.width = 500;
+                this.canvas.height = 500;
+                this.context = this.canvas.getContext("2d");
+                document.body.insertBefore(this.canvas, document.body.childNodes[0]);
+                this.frameNo = 0;
+                this.interval = setInterval(updateGameArea, 20);
+            },
+            clear: function () {
+                this.context.clearRect(0, 0, this.canvas.width, this.canvas.height);
+            },
+            stop: function () {
+                clearInterval(this.interval);
+            }
+        }
+
+        function component(width, height, color, x, y, type) {
+            this.type = type;
+            if (type == "image") {
+                this.image = new Image();
+                this.image.src = color;
+            }
+            this.width = width;
+            this.height = height;
+            this.speedX = 0;
+            this.speedY = 0;
+            this.x = x;
+            this.y = y;
+            this.update = function () {
+                ctx = myGameArea.context;
+                if (type == "image") {
+                    ctx.drawImage(this.image,
+                        this.x,
+                        this.y,
+                        this.width, this.height);
+                } else {
+                    ctx.fillStyle = color;
+                    ctx.fillRect(this.x, this.y, this.width, this.height);
+                }
+            }
+            this.newPos = function () {
+                this.x += this.speedX;
+                this.y += this.speedY;
+            }
+        }
+
+        function updateGameArea() {
+            myGameArea.clear();
+            myBackground.newPos();
+            myBackground.update();
+
+            cityCinci.newPos();
+            cityCinci.update();
+
+            cityDayton.newPos();
+            cityDayton.update();
+
+            cityColumbus.newPos();
+            cityColumbus.update();
+
+            cityAthens.newPos();
+            cityAthens.update();
+
+            cityToledo.newPos();
+            cityToledo.update();
+
+            cityAkron.newPos();
+            cityAkron.update();
+
+            cityCleveland.newPos();
+            cityCleveland.update();
+
+        }
+
+        function contestedCinci() {
+            cityCinci = new component(50, 50, "https://mailuc-my.sharepoint.com/personal/reillytr_mail_uc_edu/Documents/UC%20CTF/contested.png?csf=1&e=5YmRed&cid=01e22e15-b3c2-4f36-9505-81224009931f", 35, 350, "image");
+            document.getElementById("cinci").innerHTML = "Cincinnati is Contested!";
+        }
+        function capturedCinci() {
+            cityCinci = new component(45, 45, "https://mailuc-my.sharepoint.com/personal/reillytr_mail_uc_edu/Documents/UC%20CTF/seattle-mariners.png?csf=1&e=2TWtFY&cid=abf098d4-cec6-419f-ba1e-edb859513cf1", 35, 390, "image");
+            document.getElementById("cinci").innerHTML = "Cincinnati is Captured by Seattle Mariners!";
+            document.getElementById("mariners").innerHTML = "Seattle Mariners: 1"
+        }
+
+        function contestedDayton() {
+            cityDayton = new component(50, 50, "https://mailuc-my.sharepoint.com/personal/reillytr_mail_uc_edu/Documents/UC%20CTF/contested.png?csf=1&e=5YmRed&cid=01e22e15-b3c2-4f36-9505-81224009931f", 63, 268, "image");
+            document.getElementById("dayton").innerHTML = "Dayton is Contested!";
+        }
+        function capturedDayton() {
+            cityDayton = new component(45, 45, "https://mailuc-my.sharepoint.com/personal/reillytr_mail_uc_edu/Documents/UC%20CTF/houston-astros.png?csf=1&e=y3RYva&cid=fe8e9d08-bfe8-4405-9d88-e6bc57e0a0b1", 63, 308, "image");
+            document.getElementById("dayton").innerHTML = "Dayton is Captured by Houston Astros!";
+            document.getElementById("astros").innerHTML = "Houston Astros: 1"
+        }
+
+        function contestedColumbus() {
+            cityColumbus = new component(50, 50, "https://mailuc-my.sharepoint.com/personal/reillytr_mail_uc_edu/Documents/UC%20CTF/contested.png?csf=1&e=5YmRed&cid=01e22e15-b3c2-4f36-9505-81224009931f", 220, 210, "image");
+            document.getElementById("columbus").innerHTML = "Columbus is Contested!";
+        }
+        function capturedColumbus() {
+            cityColumbus = new component(45, 45, "https://mailuc-my.sharepoint.com/personal/reillytr_mail_uc_edu/Documents/UC%20CTF/toronto-blue-jays.png?csf=1&e=GJfFME&cid=6e4b1261-d151-4466-b281-49334f75aa5e", 220, 250, "image");
+            document.getElementById("columbus").innerHTML = "Columbus is Captured by Toronto Blue Jays!";
+            document.getElementById("jays").innerHTML = "Toronto Blue Jays: 1"
+        }
+
+        function contestedAthens() {
+            cityAthens = new component(50, 50, "https://mailuc-my.sharepoint.com/personal/reillytr_mail_uc_edu/Documents/UC%20CTF/contested.png?csf=1&e=5YmRed&cid=01e22e15-b3c2-4f36-9505-81224009931f", 310, 330, "image");
+            document.getElementById("athens").innerHTML = "Athens is Contested!";
+        }
+        function capturedAthens() {
+            cityAthens = new component(45, 45, "https://mailuc-my.sharepoint.com/personal/reillytr_mail_uc_edu/Documents/UC%20CTF/houston-astros.png?csf=1&e=y3RYva&cid=fe8e9d08-bfe8-4405-9d88-e6bc57e0a0b1", 310, 370, "image");
+            document.getElementById("athens").innerHTML = "Athens is Captured by Houston Astros!";
+            document.getElementById("astros").innerHTML = "Houston Astros: 2"
+        }
+
+        function contestedToledo() {
+            cityToledo = new component(50, 50, "https://mailuc-my.sharepoint.com/personal/reillytr_mail_uc_edu/Documents/UC%20CTF/contested.png?csf=1&e=5YmRed&cid=01e22e15-b3c2-4f36-9505-81224009931f", 125, 10, "image");
+            document.getElementById("toledo").innerHTML = "Toledo is Contested!";
+        }
+        function capturedToledo() {
+            cityToledo = new component(45, 45, "https://mailuc-my.sharepoint.com/personal/reillytr_mail_uc_edu/Documents/UC%20CTF/seattle-mariners.png?csf=1&e=2TWtFY&cid=abf098d4-cec6-419f-ba1e-edb859513cf1", 125, 50, "image");
+            document.getElementById("toledo").innerHTML = "Toledo is Captured by Seattle Mariners!";
+            document.getElementById("mariners").innerHTML = "Seattle Mariners: 2"
+        }
+
+        function contestedAkron() {
+            cityAkron = new component(50, 50, "https://mailuc-my.sharepoint.com/personal/reillytr_mail_uc_edu/Documents/UC%20CTF/contested.png?csf=1&e=5YmRed&cid=01e22e15-b3c2-4f36-9505-81224009931f", 380, 85, "image");
+            document.getElementById("akron").innerHTML = "Akron is Contested!";
+        }
+        function capturedAkron() {
+            cityAkron = new component(45, 45, "https://mailuc-my.sharepoint.com/personal/reillytr_mail_uc_edu/Documents/UC%20CTF/seattle-mariners.png?csf=1&e=2TWtFY&cid=abf098d4-cec6-419f-ba1e-edb859513cf1", 380, 125, "image");
+            document.getElementById("akron").innerHTML = "Akron is Captured by Seattle Mariners!";
+            document.getElementById("mariners").innerHTML = "Seattle Mariners: 3"
+        }
+
+        function contestedCleveland() {
+            cityCleveland = new component(50, 50, "https://mailuc-my.sharepoint.com/personal/reillytr_mail_uc_edu/Documents/UC%20CTF/contested.png?csf=1&e=5YmRed&cid=01e22e15-b3c2-4f36-9505-81224009931f", 355, 30, "image");
+            document.getElementById("cleveland").innerHTML = "Cleveland is Contested!";
+        }
+        function capturedCleveland() {
+            cityCleveland = new component(45, 45, "https://mailuc-my.sharepoint.com/personal/reillytr_mail_uc_edu/Documents/UC%20CTF/toronto-blue-jays.png?csf=1&e=GJfFME&cid=6e4b1261-d151-4466-b281-49334f75aa5e", 355, 70, "image");
+            document.getElementById("cleveland").innerHTML = "Cleveland is Captured by Toronto Blue Jays!";
+            document.getElementById("jays").innerHTML = "Toronto Blue Jays: 2"
+            document.getElementById("liveFeed").innerHTML = "Seattle Mariners Win!"
+        }
+    </script>
+
+</div>
+
+</body>
+</html>

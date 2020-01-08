@@ -1,0 +1,9 @@
+{
+  "name": "test-scoreboard",
+  "version": "0.0.0",
+  "description": "testScoreboard",
+  "main": "server.js",
+  "author": {
+    "name": "Taylor"
+  }
+}
