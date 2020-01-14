@@ -8,4 +8,4 @@ an Ohio map scoreboard for UC CTF Senior Design project.
 * open a terminal.
 * `cd testScoreboard`
 * run `node server.js`
-* now you can open the project in http://Localhost:1337/
+* now you can open the project in http://localhost:1337/
