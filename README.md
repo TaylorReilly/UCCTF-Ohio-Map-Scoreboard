@@ -4,7 +4,7 @@ an Ohio map scoreboard for UC CTF Senior Design project.
 * this project uses Node.js. Download it [here](https://nodejs.org/en/download/).
 
 ## Instructions
-1. clone this project into Visual Studio Code.
+1. clone the project into Visual Studio Code.
 2. open a terminal.
 3. `cd testScoreboard`
 4. run `node server.js`
