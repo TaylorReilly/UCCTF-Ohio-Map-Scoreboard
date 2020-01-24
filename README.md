@@ -1,7 +1,6 @@
 # UC CTF Ohio Map Scoreboard
 an Ohio map scoreboard for UC CTF Senior Design project.
 * Main project: https://github.com/devaughnpenn/UCCTF
-* Another related repo: https://github.com/TaylorReilly/UC-CTF
 * this project uses Node.js. Download it [here](https://nodejs.org/en/download/).
 
 ## Instructions
